@@ -1,0 +1,15 @@
+import "bond/core/bond.bond"
+
+namespace Lionize.IntegrationMessages
+
+struct UserEntity<TIdentity>
+{
+    0: TIdentity ID;
+    1: bond.GUID UserID;
+}
+
+struct BigInteger
+{
+    0: blob Value;
+}
+

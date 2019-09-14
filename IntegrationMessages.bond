@@ -13,3 +13,23 @@ struct BigInteger
     0: blob Value;
 }
 
+struct Moment
+{
+    0: int64 Value;
+}
+
+struct Subtask
+{
+    0: int32 ID;
+    1: bool Completed;
+    2: string Title;
+}
+
+struct TaskUpserted : UserEntity<BigInteger>
+{
+    0: bool Completed;
+    1: string Title;
+    2: Moment CreatedAt;
+    3: string Description;
+    4: vector<Subtask> Subtasks;
+}

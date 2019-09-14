@@ -6,4 +6,8 @@
     <RootNamespace>TIKSN.Lionize.Messaging</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TIKSN-Framework" Version="3.2.0-alpha" />
+  </ItemGroup>
+
 </Project>

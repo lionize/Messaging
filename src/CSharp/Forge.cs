@@ -1,25 +1,31 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Serialization;
 
 namespace TIKSN.Lionize.Messaging
 {
     public class Forge
     {
+        private readonly IOptions<ApplicationOptions> _applicationOptions;
         private readonly IConnectionFactory _connectionFactory;
+
         //private readonly Channel<object> _consumingChannel;
         private readonly IDeserializer<byte[]> _deserializer;
-        private readonly Channel<object> _producingChannel;
+
         private readonly ILogger<Forge> _logger;
+        private readonly Channel<object> _producingChannel;
         private readonly ISerializer<byte[]> _serializer;
 
         public Forge(
             IConfigurationRoot configurationRoot,
+            IOptions<ApplicationOptions> applicationOptions,
             ILogger<Forge> logger,
             ISerializer<byte[]> serializer,
             IDeserializer<byte[]> deserializer)
@@ -30,6 +36,7 @@ namespace TIKSN.Lionize.Messaging
             };
 
             _connectionFactory = factory;
+            _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
@@ -50,24 +57,27 @@ namespace TIKSN.Lionize.Messaging
                     //channel.BasicPublish()
                     //channel.BasicGet(, )
 
-                    var message = await _producingChannel.Reader.ReadAsync(cancellationToken);
-
-                    try
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        var basicProperties = channel.CreateBasicProperties();
-                        basicProperties.AppId = "appid";
-                        basicProperties.CorrelationId = "";
-                        basicProperties.DeliveryMode = 2;
-                        basicProperties.Persistent = true;
-                        basicProperties.Type = message.GetType().FullName;
+                        var message = await _producingChannel.Reader.ReadAsync(cancellationToken);
 
-                        var body = _serializer.Serialize(message);
+                        try
+                        {
+                            var basicProperties = channel.CreateBasicProperties();
+                            basicProperties.AppId = _applicationOptions.Value.ApplictionId;
+                            basicProperties.CorrelationId = "corr";
+                            basicProperties.DeliveryMode = 2;
+                            basicProperties.Persistent = true;
+                            basicProperties.Type = message.GetType().FullName;
 
-                        channel.BasicPublish("", "", mandatory: true, basicProperties, body);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, ex.Message);
+                            var body = _serializer.Serialize(message);
+
+                            channel.BasicPublish("exchange", "rkey", mandatory: true, basicProperties, body);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, ex.Message);
+                        }
                     }
                 }
             }

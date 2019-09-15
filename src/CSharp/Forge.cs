@@ -45,6 +45,23 @@ namespace TIKSN.Lionize.Messaging
 
         public async Task ConsumeAsync(CancellationToken cancellationToken)
         {
+            using (IConnection conn = _connectionFactory.CreateConnection())
+            {
+                using (IModel channel = conn.CreateModel())
+                {
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        var messageResult = channel.BasicGet("queue", autoAck: false);
+
+                        if (messageResult != null)
+                        {
+                            //deserialize
+                            //handle
+                            channel.BasicAck(messageResult.DeliveryTag, multiple: false);
+                        }
+                    }
+                }
+            }
         }
 
         public async Task ProduceAsync(CancellationToken cancellationToken)

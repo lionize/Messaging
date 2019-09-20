@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 
 namespace TIKSN.Lionize.Messaging.Providers
 {
-    public class CachedConnectionProvider
+    public class CachedConnectionProvider : ICachedConnectionProvider
     {
         private readonly IConnectionFactory _connectionFactory;
         private readonly object _connectionLocker;
@@ -35,9 +35,10 @@ namespace TIKSN.Lionize.Messaging.Providers
                 {
                     if (_connection == null || _connectionDisposable.IsDisposed)
                     {
-                        _connection = new CachedConnection(_connectionFactory.CreateConnection(), _logger);
-                        _logger.LogInformation("Created new connection");
+                        var connection = _connectionFactory.CreateConnection();
                         _connectionDisposable = new RefCountDisposable(_connection, throwWhenDisposed: true);
+                        _connection = new CachedConnection(_connectionFactory.CreateConnection(), _connectionDisposable.GetDisposable(), _logger);
+                        _logger.LogInformation("Created new connection");
                     }
                 }
             }

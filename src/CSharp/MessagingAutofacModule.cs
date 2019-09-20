@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using TIKSN.Lionize.Messaging.Providers;
 using TIKSN.Lionize.Messaging.Services;
 
 namespace TIKSN.Lionize.Messaging
@@ -10,6 +11,11 @@ namespace TIKSN.Lionize.Messaging
             builder
                 .RegisterType<MessageTypeLookupServices>()
                 .As<IMessageTypeLookupServices>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<CachedConnectionProvider>()
+                .As<ICachedConnectionProvider>()
                 .SingleInstance();
         }
     }

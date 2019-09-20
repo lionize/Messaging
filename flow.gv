@@ -1,14 +1,14 @@
 digraph {
-    GoogleTasks [shape=component]
-    MicrosoftToDo [shape=component]
-    HabiticaTaskProviderService [shape=component]
-    TaskUpserted [shape=note]
-    task_upserted_exchange [shape=box3d]
-    task_upserted_task_management_queue [shape=cylinder]
+    GoogleTasks [shape=component, color=blue]
+    MicrosoftToDo [shape=component, color=blue]
+    HabiticaTaskProviderService [shape=component, color=blue]
+    TaskUpserted [shape=note, color=navy]
+    task_upserted_exchange [shape=box3d, color=darkorange]
+    task_upserted_task_management_queue [shape=box3d, color=crimson]
 
     GoogleTasks -> TaskUpserted
     MicrosoftToDo -> TaskUpserted
     HabiticaTaskProviderService -> TaskUpserted
-    TaskUpserted -> task_upserted_exchange;
-    task_upserted_exchange -> task_upserted_task_management_queue;
+    TaskUpserted -> task_upserted_exchange
+    task_upserted_exchange -> task_upserted_task_management_queue
 }

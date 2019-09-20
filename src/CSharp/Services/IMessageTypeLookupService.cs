@@ -4,6 +4,8 @@ namespace TIKSN.Lionize.Messaging.Services
 {
     public interface IMessageTypeLookupService
     {
+        string GetMessageExchange(Type type);
+
         string GetMessageName(Type type);
 
         string GetMessageName<TMessage>();

@@ -4,21 +4,26 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Lionize.Messaging.Options;
+using TIKSN.Lionize.Messaging.Providers;
 
 namespace TIKSN.Lionize.Messaging.BackgroundServices
 {
     public class ConsumerBackgroundService<TMessage> : BackgroundService
     {
         private readonly IOptions<ApplicationOptions> _applicationOptions;
+        private readonly ICachedConnectionProvider _cachedConnectionProvider;
 
-        public ConsumerBackgroundService(IOptions<ApplicationOptions> applicationOptions)
+        public ConsumerBackgroundService(ICachedConnectionProvider cachedConnectionProvider, IOptions<ApplicationOptions> applicationOptions)
         {
+            _cachedConnectionProvider = cachedConnectionProvider ?? throw new ArgumentNullException(nameof(cachedConnectionProvider));
             _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            throw new NotImplementedException();
+            using (var connection = _cachedConnectionProvider.GetConnection())
+            {
+            }
         }
     }
 }

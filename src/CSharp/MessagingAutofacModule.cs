@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using TIKSN.Integration.Correlation;
 using TIKSN.Lionize.Messaging.Providers;
 using TIKSN.Lionize.Messaging.Services;
 
@@ -16,6 +17,11 @@ namespace TIKSN.Lionize.Messaging
             builder
                 .RegisterType<CachedConnectionProvider>()
                 .As<ICachedConnectionProvider>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<Base62CorrelationService>()
+                .As<ICorrelationService>()
                 .SingleInstance();
         }
     }

@@ -9,8 +9,8 @@ namespace TIKSN.Lionize.Messaging
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<MessageTypeLookupServices>()
-                .As<IMessageTypeLookupServices>()
+                .RegisterType<MessageTypeLookupService>()
+                .As<IMessageTypeLookupService>()
                 .SingleInstance();
 
             builder

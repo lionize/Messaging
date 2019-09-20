@@ -15,6 +15,8 @@ namespace TIKSN.Lionize.Messaging.Services
             _typeToName = new Dictionary<Type, string>();
 
             Add<TaskUpserted>("task_upserted");
+            Add<TaskCompletionChnaged>("task_completion_chnaged");
+            Add<SubtaskCompletionChnaged>("subtask_completion_chnaged");
 
             _nameToType = _typeToName.ToDictionary(k => k.Value, v => v.Key);
         }

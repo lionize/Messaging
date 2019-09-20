@@ -25,6 +25,8 @@ namespace TIKSN.Lionize.Messaging.Services
             _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
         }
 
+        public string GetMessageExchange(Type type) => $"{GetMessageName(type)}_exchange";
+
         public string GetMessageName(Type type) => _typeToName[type];
 
         public string GetMessageName<TMessage>() => GetMessageName(typeof(TMessage));

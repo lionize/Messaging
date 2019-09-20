@@ -23,6 +23,8 @@ namespace TIKSN.Lionize.Messaging.Services
 
         public string GetMessageName(Type type) => _typeToName[type];
 
+        public string GetMessageName<TMessage>() => GetMessageName(typeof(TMessage));
+
         public Type GetMessageType(string name) => _nameToType[name];
 
         private void Add<T>(string name)

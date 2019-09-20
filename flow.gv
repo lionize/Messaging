@@ -23,4 +23,7 @@ digraph {
     task_completion_chnaged_exchange -> task_completion_chnaged_habitica_queue
     task_completion_chnaged_exchange -> task_completion_chnaged_microsoft_to_do_queue
     task_completion_chnaged_exchange -> task_completion_chnaged_google_tasks_queue
+    task_completion_chnaged_habitica_queue -> HabiticaTaskProviderService
+    task_completion_chnaged_microsoft_to_do_queue -> MicrosoftToDoTaskProviderService
+    task_completion_chnaged_google_tasks_queue -> GoogleTasksTaskProviderService
 }

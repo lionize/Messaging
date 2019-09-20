@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TIKSN.Lionize.Messaging.Services
 {
-    public class MessageTypeLookupServices
+    public class MessageTypeLookupServices : IMessageTypeLookupServices
     {
         private readonly Dictionary<string, Type> _nameToType;
         private readonly Dictionary<Type, string> _typeToName;

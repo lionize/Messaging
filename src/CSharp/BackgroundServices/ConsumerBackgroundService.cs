@@ -45,7 +45,7 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
         {
             using (var connection = _cachedConnectionProvider.GetConnection())
             {
-                var queueName = $"{_messageTypeLookupService.GetMessageName<TMessage>()}_{_applicationOptions.Value.ApplictionQueuePart}_queue";
+                var queueName = _messageTypeLookupService.GetMessageQueue<TMessage>();
                 _logger.LogInformation($"Queue name is estimated to be {queueName}");
 
                 using (var channel = connection.Connection.CreateModel())

@@ -1,16 +1,19 @@
 ﻿using Lionize.IntegrationMessages;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TIKSN.Lionize.Messaging.Options;
 
 namespace TIKSN.Lionize.Messaging.Services
 {
     public class MessageTypeLookupService : IMessageTypeLookupService
     {
+        private readonly IOptions<ApplicationOptions> _applicationOptions;
         private readonly Dictionary<string, Type> _nameToType;
         private readonly Dictionary<Type, string> _typeToName;
 
-        public MessageTypeLookupService()
+        public MessageTypeLookupService(IOptions<ApplicationOptions> applicationOptions)
         {
             _typeToName = new Dictionary<Type, string>();
 
@@ -19,11 +22,16 @@ namespace TIKSN.Lionize.Messaging.Services
             Add<SubtaskCompletionChnaged>("subtask_completion_chnaged");
 
             _nameToType = _typeToName.ToDictionary(k => k.Value, v => v.Key);
+            _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
         }
 
         public string GetMessageName(Type type) => _typeToName[type];
 
         public string GetMessageName<TMessage>() => GetMessageName(typeof(TMessage));
+
+        public string GetMessageQueue(Type type) => $"{GetMessageName(type)}_{_applicationOptions.Value.ApplictionQueuePart}_queue";
+
+        public string GetMessageQueue<TMessage>() => GetMessageQueue(typeof(TMessage));
 
         public Type GetMessageType(string name) => _nameToType[name];
 

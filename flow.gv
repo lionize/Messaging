@@ -1,14 +1,26 @@
 digraph {
-    GoogleTasks [shape=component, color=blue]
-    MicrosoftToDo [shape=component, color=blue]
+    GoogleTasksTaskProviderService [shape=component, color=blue]
+    MicrosoftToDoTaskProviderService [shape=component, color=blue]
     HabiticaTaskProviderService [shape=component, color=blue]
+    TaskManagementService [shape=component, color=blue]
     TaskUpserted [shape=note, color=navy]
+    TaskCompletionChnaged [shape=note, color=navy]
     task_upserted_exchange [shape=box3d, color=darkorange]
+    task_completion_chnaged_exchange [shape=box3d, color=darkorange]
     task_upserted_task_management_queue [shape=box3d, color=crimson]
+    task_completion_chnaged_habitica_queue [shape=box3d, color=crimson]
+    task_completion_chnaged_microsoft_to_do_queue [shape=box3d, color=crimson]
+    task_completion_chnaged_google_tasks_queue [shape=box3d, color=crimson]
 
-    GoogleTasks -> TaskUpserted
-    MicrosoftToDo -> TaskUpserted
+    GoogleTasksTaskProviderService -> TaskUpserted
+    MicrosoftToDoTaskProviderService -> TaskUpserted
     HabiticaTaskProviderService -> TaskUpserted
     TaskUpserted -> task_upserted_exchange
     task_upserted_exchange -> task_upserted_task_management_queue
+    task_upserted_task_management_queue -> TaskManagementService
+    TaskManagementService -> TaskCompletionChnaged
+    TaskCompletionChnaged -> task_completion_chnaged_exchange
+    task_completion_chnaged_exchange -> task_completion_chnaged_habitica_queue
+    task_completion_chnaged_exchange -> task_completion_chnaged_microsoft_to_do_queue
+    task_completion_chnaged_exchange -> task_completion_chnaged_google_tasks_queue
 }

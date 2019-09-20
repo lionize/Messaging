@@ -1,0 +1,14 @@
+digraph {
+    GoogleTasks [shape=component]
+    MicrosoftToDo [shape=component]
+    HabiticaTaskProviderService [shape=component]
+    TaskUpserted [shape=note]
+    task_upserted_exchange [shape=box3d]
+    task_upserted_task_management_queue [shape=cylinder]
+
+    GoogleTasks -> TaskUpserted
+    MicrosoftToDo -> TaskUpserted
+    HabiticaTaskProviderService -> TaskUpserted
+    TaskUpserted -> task_upserted_exchange;
+    task_upserted_exchange -> task_upserted_task_management_queue;
+}

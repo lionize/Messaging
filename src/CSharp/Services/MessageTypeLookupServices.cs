@@ -21,6 +21,10 @@ namespace TIKSN.Lionize.Messaging.Services
             _nameToType = _typeToName.ToDictionary(k => k.Value, v => v.Key);
         }
 
+        public string GetMessageName(Type type) => _typeToName[type];
+
+        public Type GetMessageType(string name) => _nameToType[name];
+
         private void Add<T>(string name)
         {
             _typeToName.Add(typeof(T), name);

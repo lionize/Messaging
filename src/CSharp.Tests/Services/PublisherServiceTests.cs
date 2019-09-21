@@ -34,19 +34,20 @@ namespace TIKSN.Lionize.Messaging.Tests.Services
         {
             await _publisherInitializerService.InitializeAsync(default);
 
-            var userId = Guid.NewGuid();
+            Bond.GUID userId = Guid.NewGuid();
 
             for (int i = 0; i < 10; i++)
             {
                 var buffer = new byte[16];
                 _random.NextBytes(buffer);
 
+#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
                 await _publisherService.ProduceAsync(new TaskUpserted
                 {
                     Completed = _random.Next(3) == 0,
                     CreatedAt = new Moment
                     {
-                        Value = _timeProvider.GetCurrentTime().ToUnixTimeMilliseconds()
+                        Value = _timeProvider.GetCurrentTime().ToUnixTimeSeconds()
                     },
                     Description = _random.Next().ToString() + _random.Next().ToString() + _random.Next().ToString(),
                     ID = new BigInteger
@@ -64,7 +65,8 @@ namespace TIKSN.Lionize.Messaging.Tests.Services
                             Title = _random.Next().ToString() + _random.Next().ToString() + _random.Next().ToString()
                         }
                     }
-                }, _correlationService.Generate(), default).ConfigureAwait(false);
+                }, _correlationService.Generate(), default);
+#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
             }
         }
     }

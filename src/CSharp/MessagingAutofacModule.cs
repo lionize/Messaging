@@ -28,6 +28,11 @@ namespace TIKSN.Lionize.Messaging
                 .RegisterType<PublisherService>()
                 .As<IPublisherService>()
                 .SingleInstance();
+
+            builder
+                .RegisterType<PublisherInitializerService>()
+                .As<IPublisherInitializerService>()
+                .SingleInstance();
         }
     }
 }

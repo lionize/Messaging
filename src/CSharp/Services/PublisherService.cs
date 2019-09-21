@@ -11,7 +11,7 @@ using TIKSN.Serialization;
 
 namespace TIKSN.Lionize.Messaging.Services
 {
-    public class PublisherService
+    public class PublisherService : IPublisherService
     {
         private readonly IOptions<ApplicationOptions> _applicationOptions;
         private readonly ICachedConnectionProvider _cachedConnectionProvider;
@@ -48,9 +48,8 @@ namespace TIKSN.Lionize.Messaging.Services
                             var basicProperties = channel.CreateBasicProperties();
                             basicProperties.AppId = _applicationOptions.Value.ApplictionId;
                             basicProperties.CorrelationId = correlationID;
-                            basicProperties.DeliveryMode = 2;
                             basicProperties.Persistent = true;
-                            basicProperties.Type = message.GetType().FullName;
+                            basicProperties.Type = _messageTypeLookupService.GetMessageName(message.GetType());
 
                             var body = _serializer.Serialize(message);
 

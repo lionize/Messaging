@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TIKSN.Lionize.Messaging.Services
 {
@@ -9,6 +10,8 @@ namespace TIKSN.Lionize.Messaging.Services
         string GetMessageName(Type type);
 
         string GetMessageName<TMessage>();
+
+        IEnumerable<string> GetMessageNames();
 
         string GetMessageQueue(Type type);
 

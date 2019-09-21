@@ -7,6 +7,8 @@ namespace TIKSN.Lionize.Messaging.Services
     {
         string GetMessageExchange(Type type);
 
+        string GetMessageExchange(string name);
+
         string GetMessageName(Type type);
 
         string GetMessageName<TMessage>();

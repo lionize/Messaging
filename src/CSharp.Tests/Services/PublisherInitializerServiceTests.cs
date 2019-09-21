@@ -1,9 +1,8 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
-using TIKSN.DependencyInjection;
+using TIKSN.Lionize.Messaging.Tests;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace TIKSN.Lionize.Messaging.Services.Tests
 {
@@ -11,14 +10,9 @@ namespace TIKSN.Lionize.Messaging.Services.Tests
     {
         private readonly IPublisherInitializerService _publisherInitializerService;
 
-        public PublisherInitializerServiceTests()
+        public PublisherInitializerServiceTests(ITestOutputHelper testOutputHelper)
         {
-            var services = new ServiceCollection();
-            services.AddFrameworkPlatform();
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<MessagingAutofacModule>();
-            builder.Populate(services);
-            var serviceProvider = new AutofacServiceProvider(builder.Build());
+            var serviceProvider = HiHelper.CreateServiceProvider(testOutputHelper);
             _publisherInitializerService = serviceProvider.GetRequiredService<IPublisherInitializerService>();
         }
 

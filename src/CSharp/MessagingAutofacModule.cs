@@ -23,6 +23,11 @@ namespace TIKSN.Lionize.Messaging
                 .RegisterType<Base62CorrelationService>()
                 .As<ICorrelationService>()
                 .SingleInstance();
+
+            builder
+                .RegisterType<PublisherService>()
+                .As<IPublisherService>()
+                .SingleInstance();
         }
     }
 }

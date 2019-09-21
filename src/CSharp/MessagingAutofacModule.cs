@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using TIKSN.Analytics.Telemetry;
 using TIKSN.Integration.Correlation;
 using TIKSN.Lionize.Messaging.Providers;
 using TIKSN.Lionize.Messaging.Services;
@@ -45,11 +44,6 @@ namespace TIKSN.Lionize.Messaging
             builder
                 .RegisterType<CompactBinaryBondSerializer>()
                 .As<ISerializer<byte[]>>()
-                .SingleInstance();
-
-            builder
-                .RegisterType<TelemetryLogger>()
-                .As<IExceptionTelemeter>()
                 .SingleInstance();
         }
     }

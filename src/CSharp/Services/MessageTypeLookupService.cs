@@ -25,11 +25,15 @@ namespace TIKSN.Lionize.Messaging.Services
             _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
         }
 
-        public string GetMessageExchange(Type type) => $"{GetMessageName(type)}_exchange";
+        public string GetMessageExchange(Type type) => GetMessageExchange(GetMessageName(type));
+
+        public string GetMessageExchange(string name) => $"{name}_exchange";
 
         public string GetMessageName(Type type) => _typeToName[type];
 
         public string GetMessageName<TMessage>() => GetMessageName(typeof(TMessage));
+
+        public IEnumerable<string> GetMessageNames() => _nameToType.Keys;
 
         public string GetMessageQueue(Type type) => $"{GetMessageName(type)}_{_applicationOptions.Value.ApplictionQueuePart}_queue";
 

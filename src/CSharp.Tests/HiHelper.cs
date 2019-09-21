@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using TIKSN.DependencyInjection;
+using TIKSN.Lionize.Messaging.Options;
 using Xunit.Abstractions;
 
 namespace TIKSN.Lionize.Messaging.Tests
@@ -25,6 +26,12 @@ namespace TIKSN.Lionize.Messaging.Tests
                 var loggerConfiguration = new LoggerConfiguration();
                 loggerConfiguration.WriteTo.TestOutput(testOutputHelper);
                 config.AddSerilog(loggerConfiguration.CreateLogger());
+            });
+
+            services.Configure<ApplicationOptions>(options =>
+            {
+                options.ApplictionId = "UnitTest";
+                options.ApplictionQueuePart = "unit_test";
             });
 
             var builder = new ContainerBuilder();

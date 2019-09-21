@@ -33,3 +33,14 @@ struct TaskUpserted : UserEntity<BigInteger>
     3: string Description;
     4: vector<Subtask> Subtasks;
 }
+
+struct TaskCompletionChnaged : UserEntity<BigInteger>
+{
+    0: bool Completed;
+}
+
+struct SubtaskCompletionChnaged : UserEntity<BigInteger>
+{
+    0: int32 SubtaskID;
+    1: bool Completed;
+}

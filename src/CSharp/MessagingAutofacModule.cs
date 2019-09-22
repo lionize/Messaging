@@ -2,6 +2,8 @@
 using TIKSN.Integration.Correlation;
 using TIKSN.Lionize.Messaging.Providers;
 using TIKSN.Lionize.Messaging.Services;
+using TIKSN.Serialization;
+using TIKSN.Serialization.Bond;
 
 namespace TIKSN.Lionize.Messaging
 {
@@ -32,6 +34,16 @@ namespace TIKSN.Lionize.Messaging
             builder
                 .RegisterType<PublisherInitializerService>()
                 .As<IPublisherInitializerService>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<CompactBinaryBondDeserializer>()
+                .As<IDeserializer<byte[]>>()
+                .SingleInstance();
+
+            builder
+                .RegisterType<CompactBinaryBondSerializer>()
+                .As<ISerializer<byte[]>>()
                 .SingleInstance();
         }
     }

@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Integration.Correlation;
 using TIKSN.Lionize.Messaging.Handlers;
-using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.Messaging.Providers;
 using TIKSN.Lionize.Messaging.Services;
 using TIKSN.Serialization;
@@ -15,7 +14,6 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
 {
     public class ConsumerBackgroundService<TMessage> : BackgroundService
     {
-        private readonly IOptions<ApplicationOptions> _applicationOptions;
         private readonly ICachedConnectionProvider _cachedConnectionProvider;
         private readonly IConsumerMessageHandler<TMessage> _consumerMessageHandler;
         private readonly ICorrelationService _correlationService;
@@ -29,7 +27,6 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
             IDeserializer<byte[]> deserializer,
             IConsumerMessageHandler<TMessage> consumerMessageHandler,
             ICorrelationService correlationService,
-            IOptions<ApplicationOptions> applicationOptions,
             ILogger<ConsumerBackgroundService<TMessage>> logger)
         {
             _cachedConnectionProvider = cachedConnectionProvider ?? throw new ArgumentNullException(nameof(cachedConnectionProvider));
@@ -37,7 +34,6 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
             _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
             _consumerMessageHandler = consumerMessageHandler ?? throw new ArgumentNullException(nameof(consumerMessageHandler));
             _correlationService = correlationService ?? throw new ArgumentNullException(nameof(correlationService));
-            _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -47,10 +43,13 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
             {
                 var queueName = _messageTypeLookupService.GetMessageQueue<TMessage>();
                 _logger.LogInformation($"Queue name is estimated to be {queueName}");
+                var exchangeName = _messageTypeLookupService.GetMessageExchange<TMessage>();
+                _logger.LogInformation($"Exchange name is estimated to be {exchangeName}");
 
                 using (var channel = connection.Connection.CreateModel())
                 {
-                    //TODO: setup exchange and channel connection
+                    channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, new Dictionary<string, object>());
+                    channel.QueueBind(queueName, exchangeName, "", new Dictionary<string, object>());
                 }
 
                 using (var channel = connection.Connection.CreateModel())

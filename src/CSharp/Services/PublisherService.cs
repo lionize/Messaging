@@ -58,6 +58,7 @@ namespace TIKSN.Lionize.Messaging.Services
                         catch (Exception ex)
                         {
                             _logger.LogError(ex, ex.Message);
+                            throw ex;
                         }
                     }
                 }

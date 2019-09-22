@@ -29,6 +29,8 @@ namespace TIKSN.Lionize.Messaging.Services
 
         public string GetMessageExchange(string name) => $"{name}_exchange";
 
+        public string GetMessageExchange<TMessage>() => GetMessageExchange(typeof(TMessage));
+
         public string GetMessageName(Type type) => _typeToName[type];
 
         public string GetMessageName<TMessage>() => GetMessageName(typeof(TMessage));

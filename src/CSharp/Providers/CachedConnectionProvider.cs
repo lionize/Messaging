@@ -36,7 +36,7 @@ namespace TIKSN.Lionize.Messaging.Providers
                     if (_connection == null || _connectionDisposable.IsDisposed)
                     {
                         var connection = _connectionFactory.CreateConnection();
-                        _connectionDisposable = new RefCountDisposable(_connection, throwWhenDisposed: true);
+                        _connectionDisposable = new RefCountDisposable(connection, throwWhenDisposed: true);
                         _connection = new CachedConnection(_connectionFactory.CreateConnection(), _connectionDisposable.GetDisposable(), _logger);
                         _logger.LogInformation("Created new connection");
                     }

@@ -37,7 +37,7 @@ namespace TIKSN.Lionize.Messaging.Tests.BackgroundServices
         [Fact]
         public async Task ConsumeTest()
         {
-            TaskUpserted latest;
+            TaskUpserted latest = null;
             _taskUpsertedTestHandler.ReceivedMessages.Subscribe(message =>
             {
                 latest = message;

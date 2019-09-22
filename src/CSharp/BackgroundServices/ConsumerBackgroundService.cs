@@ -48,6 +48,7 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
 
                 using (var channel = connection.Connection.CreateModel())
                 {
+                    channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, new Dictionary<string, object>());
                     channel.QueueBind(queueName, exchangeName, "", new Dictionary<string, object>());
                 }
 

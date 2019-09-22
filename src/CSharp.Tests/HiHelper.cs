@@ -12,7 +12,7 @@ namespace TIKSN.Lionize.Messaging.Tests
 {
     public static class HiHelper
     {
-        public static IServiceProvider CreateServiceProvider(ITestOutputHelper testOutputHelper)
+        public static IServiceProvider CreateServiceProvider(ITestOutputHelper testOutputHelper, Action<IServiceCollection> configureServices = null)
         {
             var configurationRoot = new ConfigurationBuilder()
                 .AddUserSecrets("TIKSN.Lionize.Messaging-ff8437fb-8fd1-4f20-8954-4de742dc60d2")
@@ -33,6 +33,8 @@ namespace TIKSN.Lionize.Messaging.Tests
                 options.ApplictionId = "UnitTest";
                 options.ApplictionQueuePart = "unit_test";
             });
+
+            configureServices?.Invoke(services);
 
             var builder = new ContainerBuilder();
             builder.RegisterModule<MessagingAutofacModule>();

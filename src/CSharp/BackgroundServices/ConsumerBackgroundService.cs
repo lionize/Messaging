@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Integration.Correlation;
 using TIKSN.Lionize.Messaging.Handlers;
-using TIKSN.Lionize.Messaging.Options;
 using TIKSN.Lionize.Messaging.Providers;
 using TIKSN.Lionize.Messaging.Services;
 using TIKSN.Serialization;
@@ -15,7 +13,6 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
 {
     public class ConsumerBackgroundService<TMessage> : BackgroundService
     {
-        private readonly IOptions<ApplicationOptions> _applicationOptions;
         private readonly ICachedConnectionProvider _cachedConnectionProvider;
         private readonly IConsumerMessageHandler<TMessage> _consumerMessageHandler;
         private readonly ICorrelationService _correlationService;
@@ -29,7 +26,6 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
             IDeserializer<byte[]> deserializer,
             IConsumerMessageHandler<TMessage> consumerMessageHandler,
             ICorrelationService correlationService,
-            IOptions<ApplicationOptions> applicationOptions,
             ILogger<ConsumerBackgroundService<TMessage>> logger)
         {
             _cachedConnectionProvider = cachedConnectionProvider ?? throw new ArgumentNullException(nameof(cachedConnectionProvider));
@@ -37,7 +33,6 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
             _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
             _consumerMessageHandler = consumerMessageHandler ?? throw new ArgumentNullException(nameof(consumerMessageHandler));
             _correlationService = correlationService ?? throw new ArgumentNullException(nameof(correlationService));
-            _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

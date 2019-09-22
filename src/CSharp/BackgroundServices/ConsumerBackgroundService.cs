@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TIKSN.Integration.Correlation;
@@ -42,10 +43,12 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
             {
                 var queueName = _messageTypeLookupService.GetMessageQueue<TMessage>();
                 _logger.LogInformation($"Queue name is estimated to be {queueName}");
+                var exchangeName = _messageTypeLookupService.GetMessageExchange<TMessage>();
+                _logger.LogInformation($"Exchange name is estimated to be {exchangeName}");
 
                 using (var channel = connection.Connection.CreateModel())
                 {
-                    //TODO: setup exchange and channel connection
+                    channel.QueueBind(queueName, exchangeName, "", new Dictionary<string, object>());
                 }
 
                 using (var channel = connection.Connection.CreateModel())

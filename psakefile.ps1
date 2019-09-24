@@ -1,4 +1,11 @@
 Task PublishCSharp -Depends PackCSharp {
+    $nupkg = Join-Path -Path $script:trashFolder -ChildPath "TIKSN.Lionize.Messaging.$script:NextVersion.nupkg"
+    $nupkg = Resolve-Path -Path $nupkg
+    $nupkg = $nupkg.Path
+
+    $apiKey = [Environment]::GetEnvironmentVariable('TIKSN-Lionize-Messaging-ApiKey')
+
+    Exec { nuget push $nupkg -ApiKey $apiKey -Source https://api.nuget.org/v3/index.json }
 }
 
 Task PackCSharp -Depends BuildCSharp, EstimateVersions {

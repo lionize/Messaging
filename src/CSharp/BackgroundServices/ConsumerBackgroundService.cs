@@ -52,27 +52,32 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
                     channel.QueueBind(queueName, exchangeName, "", new Dictionary<string, object>());
                 }
 
-                using (var channel = connection.Connection.CreateModel())
+                await Task.Run(() => PullAndProcessAsync(connection, queueName, stoppingToken), stoppingToken).ConfigureAwait(false);
+            }
+        }
+
+        private async Task PullAndProcessAsync(CachedConnection connection, string queueName, CancellationToken stoppingToken)
+        {
+            using (var channel = connection.Connection.CreateModel())
+            {
+                while (!stoppingToken.IsCancellationRequested)
                 {
-                    while (!stoppingToken.IsCancellationRequested)
+                    var messageResult = channel.BasicGet(queueName, autoAck: false);
+
+                    if (messageResult != null)
                     {
-                        var messageResult = channel.BasicGet(queueName, autoAck: false);
-
-                        if (messageResult != null)
+                        try
                         {
-                            try
-                            {
-                                var message = _deserializer.Deserialize<TMessage>(messageResult.Body);
-                                var correlationId = _correlationService.Create(messageResult.BasicProperties.CorrelationId);
+                            var message = _deserializer.Deserialize<TMessage>(messageResult.Body);
+                            var correlationId = _correlationService.Create(messageResult.BasicProperties.CorrelationId);
 
-                                await _consumerMessageHandler.HandleAsync(message, correlationId, stoppingToken);
+                            await _consumerMessageHandler.HandleAsync(message, correlationId, stoppingToken).ConfigureAwait(false);
 
-                                channel.BasicAck(messageResult.DeliveryTag, multiple: false);
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex, ex.Message);
-                            }
+                            channel.BasicAck(messageResult.DeliveryTag, multiple: false);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, ex.Message);
                         }
                     }
                 }

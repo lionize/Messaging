@@ -44,21 +44,10 @@ namespace TIKSN.Lionize.Messaging.Tests.BackgroundServices
                 _consumerBackgroundService.Dispose();
             });
 
-            var startTask = Task.Run(async () =>
-            {
-                await _consumerBackgroundService.StartAsync(default);
-                await _consumerBackgroundService.StopAsync(default);
-            });
-
+            await _consumerBackgroundService.StartAsync(default);
             await Task.Delay(5000);
-
             _consumerBackgroundService.Dispose();
-
-            try
-            {
-                await startTask;
-            }
-            catch (TaskCanceledException) { }
+            await _consumerBackgroundService.StopAsync(default);
 
             latest.Should().NotBeNull();
         }

@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
     <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
-    <PackageReference Include="TIKSN-Framework" Version="3.2.0-alpha.21" />
+    <PackageReference Include="TIKSN-Framework" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

@@ -68,7 +68,7 @@ namespace TIKSN.Lionize.Messaging.BackgroundServices
                     {
                         try
                         {
-                            var message = _deserializer.Deserialize<TMessage>(messageResult.Body);
+                            var message = _deserializer.Deserialize<TMessage>(messageResult.Body.ToArray());
                             var correlationId = _correlationService.Create(messageResult.BasicProperties.CorrelationId);
 
                             await _consumerMessageHandler.HandleAsync(message, correlationId, stoppingToken).ConfigureAwait(false);
